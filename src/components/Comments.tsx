@@ -27,11 +27,10 @@ export default function Comments({ slug }: CommentsProps) {
     script.async = true
     script.crossOrigin = 'anonymous'
 
-    // ⚠️ 这些配置需要替换成你自己的
-    script.setAttribute('data-repo', 'ybc112/my-web3-blog')  // 替换成你的仓库
-    script.setAttribute('data-repo-id', '')  // 从 giscus.app 获取
-    script.setAttribute('data-category', 'Announcements')  // 或 General
-    script.setAttribute('data-category-id', '')  // 从 giscus.app 获取
+    script.setAttribute('data-repo', 'ybc112/my-web3-blog')
+    script.setAttribute('data-repo-id', 'R_kgDOQwYbZQ')
+    script.setAttribute('data-category', 'Announcements')
+    script.setAttribute('data-category-id', 'DIC_kwDOQwYbZc4C0V4c')
     script.setAttribute('data-mapping', 'pathname')
     script.setAttribute('data-strict', '0')
     script.setAttribute('data-reactions-enabled', '1')
