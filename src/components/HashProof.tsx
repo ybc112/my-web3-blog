@@ -40,37 +40,8 @@ export default function HashProof({ content }: HashProofProps) {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  // 发送带 data 的存证交易
   const handleProof = async () => {
-    if (!isConnected || !address) return
-
-    // 切换到 Polygon
-    if (chain?.id !== polygon.id) {
-      try {
-        switchChain({ chainId: polygon.id })
-        return // 等待用户切换后再次点击
-      } catch (error) {
-        console.error('Failed to switch chain:', error)
-        return
-      }
-    }
-
-    // 发送存证交易（发送 0 ETH 到自己，data 字段存哈希）
-    try {
-      writeContract({
-        address: address, // 发给自己
-        abi: [], // 空 ABI，直接发送 data
-        functionName: '', // 不调用函数
-        args: [],
-        value: BigInt(0),
-        data: contentHash as `0x${string}`,
-      })
-    } catch (error) {
-      console.error('Transaction failed:', error)
-    }
-  }
-
-  // 简化的发送方式：直接发送带 data 的交易
-  const handleSimpleProof = async () => {
     if (!isConnected || !address) return
 
     if (chain?.id !== polygon.id) {
@@ -174,7 +145,7 @@ export default function HashProof({ content }: HashProofProps) {
                 </button>
               ) : (
                 <button
-                  onClick={handleSimpleProof}
+                  onClick={handleProof}
                   className="w-full bg-black text-white font-bold py-4 text-sm hover:bg-zinc-800 transition-colors rounded-sm uppercase tracking-wider"
                 >
                   Verify on Polygon (~$0.01)
