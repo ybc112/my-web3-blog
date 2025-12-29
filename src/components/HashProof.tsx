@@ -50,9 +50,9 @@ export default function HashProof({ content }: HashProofProps) {
     }
 
     // 使用 window.ethereum 直接发送
-    if (typeof window !== 'undefined' && window.ethereum) {
+    if (typeof window !== 'undefined' && (window as any).ethereum) {
       try {
-        const txHash = await window.ethereum.request({
+        const txHash = await (window as any).ethereum.request({
           method: 'eth_sendTransaction',
           params: [{
             from: address,
@@ -157,12 +157,4 @@ export default function HashProof({ content }: HashProofProps) {
       </div>
     </div>
   )
-}
-
-declare global {
-  interface Window {
-    ethereum?: {
-      request: (args: { method: string; params?: unknown[] }) => Promise<unknown>
-    }
-  }
 }
