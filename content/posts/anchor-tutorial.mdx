@@ -1,0 +1,300 @@
+---
+title: "Anchor 框架入门：写你的第一个 Solana 程序"
+date: "2025-12-27"
+tags: ["solana", "anchor", "rust", "智能合约"]
+excerpt: "手把手教你使用 Anchor 框架开发 Solana 程序，从环境搭建到部署第一个计数器合约。"
+---
+
+## 什么是 Anchor？
+
+Anchor 是 Solana 生态最流行的开发框架，它大大简化了 Solana 程序的开发：
+
+- **减少样板代码** - 自动处理序列化、账户验证等
+- **类型安全** - 编译时检查，减少运行时错误
+- **测试友好** - 内置测试框架
+- **IDL 生成** - 自动生成接口描述文件
+
+## 环境搭建
+
+### 1. 安装 Rust
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
+```
+
+### 2. 安装 Solana CLI
+
+```bash
+sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
+solana config set --url devnet
+solana-keygen new
+```
+
+### 3. 安装 Anchor
+
+```bash
+cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+avm install latest
+avm use latest
+```
+
+## 创建第一个项目
+
+```bash
+anchor init my-counter
+cd my-counter
+```
+
+项目结构：
+
+```
+my-counter/
+├── Anchor.toml          # 配置文件
+├── programs/
+│   └── my-counter/
+│       └── src/lib.rs   # 程序代码
+├── tests/
+│   └── my-counter.ts    # 测试文件
+└── target/
+```
+
+## 编写计数器程序
+
+打开 `programs/my-counter/src/lib.rs`：
+
+```rust
+use anchor_lang::prelude::*;
+
+declare_id!("11111111111111111111111111111111");
+
+#[program]
+pub mod my_counter {
+    use super::*;
+
+    // 初始化计数器
+    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
+        let counter = &mut ctx.accounts.counter;
+        counter.count = 0;
+        counter.authority = ctx.accounts.authority.key();
+        msg!("Counter initialized!");
+        Ok(())
+    }
+
+    // 增加计数
+    pub fn increment(ctx: Context<Increment>) -> Result<()> {
+        let counter = &mut ctx.accounts.counter;
+        counter.count += 1;
+        msg!("Count: {}", counter.count);
+        Ok(())
+    }
+
+    // 减少计数
+    pub fn decrement(ctx: Context<Decrement>) -> Result<()> {
+        let counter = &mut ctx.accounts.counter;
+        require!(counter.count > 0, ErrorCode::CounterUnderflow);
+        counter.count -= 1;
+        msg!("Count: {}", counter.count);
+        Ok(())
+    }
+}
+
+// 初始化指令的账户结构
+#[derive(Accounts)]
+pub struct Initialize<'info> {
+    #[account(
+        init,
+        payer = authority,
+        space = 8 + 8 + 32  // discriminator + count + authority
+    )]
+    pub counter: Account<'info, Counter>,
+    #[account(mut)]
+    pub authority: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
+
+// 增加指令的账户结构
+#[derive(Accounts)]
+pub struct Increment<'info> {
+    #[account(mut)]
+    pub counter: Account<'info, Counter>,
+    pub authority: Signer<'info>,
+}
+
+// 减少指令的账户结构
+#[derive(Accounts)]
+pub struct Decrement<'info> {
+    #[account(mut)]
+    pub counter: Account<'info, Counter>,
+    pub authority: Signer<'info>,
+}
+
+// 计数器账户数据结构
+#[account]
+pub struct Counter {
+    pub count: u64,
+    pub authority: Pubkey,
+}
+
+// 自定义错误
+#[error_code]
+pub enum ErrorCode {
+    #[msg("Counter cannot go below zero")]
+    CounterUnderflow,
+}
+```
+
+## 关键概念解析
+
+### 1. `#[program]` 宏
+
+标记主程序模块，里面的每个公共函数都是一个可调用的指令。
+
+### 2. `#[derive(Accounts)]` 宏
+
+定义指令需要的账户集合，Anchor 会自动验证：
+
+| 属性 | 作用 |
+|------|------|
+| `init` | 创建新账户 |
+| `mut` | 账户可修改 |
+| `payer` | 支付账户创建费用 |
+| `space` | 账户大小 |
+
+### 3. `#[account]` 宏
+
+定义账户的数据结构，Anchor 自动处理序列化。
+
+### 4. 账户空间计算
+
+```
+space = 8 (discriminator) + 数据大小
+
+u64 = 8 bytes
+Pubkey = 32 bytes
+bool = 1 byte
+String = 4 + 字符数
+Vec<T> = 4 + (T大小 * 元素数)
+```
+
+## 构建和测试
+
+### 构建
+
+```bash
+anchor build
+```
+
+构建完成后会在 `target/deploy/` 生成程序文件。
+
+### 更新 Program ID
+
+```bash
+# 获取新的 Program ID
+solana address -k target/deploy/my_counter-keypair.json
+
+# 更新 lib.rs 中的 declare_id!
+# 更新 Anchor.toml 中的 program id
+```
+
+### 编写测试
+
+打开 `tests/my-counter.ts`：
+
+```typescript
+import * as anchor from "@coral-xyz/anchor";
+import { Program } from "@coral-xyz/anchor";
+import { MyCounter } from "../target/types/my_counter";
+import { expect } from "chai";
+
+describe("my-counter", () => {
+  const provider = anchor.AnchorProvider.env();
+  anchor.setProvider(provider);
+
+  const program = anchor.workspace.MyCounter as Program<MyCounter>;
+  const counter = anchor.web3.Keypair.generate();
+
+  it("Initializes the counter", async () => {
+    await program.methods
+      .initialize()
+      .accounts({
+        counter: counter.publicKey,
+        authority: provider.wallet.publicKey,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      })
+      .signers([counter])
+      .rpc();
+
+    const account = await program.account.counter.fetch(counter.publicKey);
+    expect(account.count.toNumber()).to.equal(0);
+  });
+
+  it("Increments the counter", async () => {
+    await program.methods
+      .increment()
+      .accounts({
+        counter: counter.publicKey,
+        authority: provider.wallet.publicKey,
+      })
+      .rpc();
+
+    const account = await program.account.counter.fetch(counter.publicKey);
+    expect(account.count.toNumber()).to.equal(1);
+  });
+
+  it("Decrements the counter", async () => {
+    await program.methods
+      .decrement()
+      .accounts({
+        counter: counter.publicKey,
+        authority: provider.wallet.publicKey,
+      })
+      .rpc();
+
+    const account = await program.account.counter.fetch(counter.publicKey);
+    expect(account.count.toNumber()).to.equal(0);
+  });
+});
+```
+
+### 运行测试
+
+```bash
+anchor test
+```
+
+## 部署到 Devnet
+
+```bash
+# 确保有测试 SOL
+solana airdrop 2
+
+# 部署
+anchor deploy
+
+# 查看部署结果
+solana program show <PROGRAM_ID>
+```
+
+## 常用 Anchor 命令
+
+```bash
+anchor init <name>    # 创建新项目
+anchor build          # 构建项目
+anchor test           # 运行测试
+anchor deploy         # 部署程序
+anchor upgrade        # 升级程序
+anchor idl init       # 初始化 IDL
+```
+
+## 下一步
+
+学会了基础的 Anchor 开发，下一步可以：
+
+1. 学习 **PDA（程序派生地址）** - 让程序拥有自己的账户
+2. 学习 **CPI（跨程序调用）** - 调用其他程序
+3. 学习 **SPL Token** - 创建和管理代币
+
+---
+
+*本文内容哈希已存证，点击下方按钮可将哈希写入 Polygon 链上。*

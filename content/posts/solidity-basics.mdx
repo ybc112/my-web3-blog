@@ -1,0 +1,60 @@
+---
+title: "Solidity 入门：从零开始写第一个智能合约"
+date: "2025-12-26"
+tags: ["solidity", "智能合约", "教程"]
+excerpt: "手把手教你用 Solidity 写一个简单的存储合约，理解状态变量、函数和 Gas 的基本概念。"
+---
+
+## 什么是 Solidity？
+
+Solidity 是以太坊智能合约的主要编程语言，语法类似 JavaScript，但有很多独特的概念需要理解。
+
+## 第一个合约：SimpleStorage
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+contract SimpleStorage {
+    // 状态变量 - 存储在链上
+    uint256 public storedNumber;
+    
+    // 写入函数 - 需要 Gas
+    function store(uint256 _number) public {
+        storedNumber = _number;
+    }
+    
+    // 读取函数 - 免费
+    function retrieve() public view returns (uint256) {
+        return storedNumber;
+    }
+}
+```
+
+## 关键概念解析
+
+### 1. 状态变量
+`storedNumber` 是一个状态变量，它的值永久存储在区块链上。每次修改都需要支付 Gas。
+
+### 2. 函数可见性
+- `public`: 任何人都可以调用
+- `private`: 只有合约内部可以调用
+- `view`: 只读取不修改状态，不消耗 Gas
+- `pure`: 不读取也不修改状态
+
+### 3. Gas 费用
+写入操作（如 `store`）需要支付 Gas，因为要改变区块链状态。
+读取操作（如 `retrieve`）如果是 `view` 或 `pure`，则免费。
+
+## 部署到测试网
+
+推荐使用 Remix IDE 快速测试：
+
+1. 打开 [remix.ethereum.org](https://remix.ethereum.org)
+2. 创建新文件，粘贴上面的代码
+3. 编译 → 部署到 Sepolia 测试网
+4. 调用 `store(42)` 和 `retrieve()` 试试
+
+## 下一步
+
+学会了基础存储，下一篇我们来写一个 ERC-20 代币合约！

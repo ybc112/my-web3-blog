@@ -1,8 +1,16 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
+import createMDX from '@next/mdx'
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  reactCompiler: true,
-};
+  pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+  output: 'export', // 静态导出，适合 Cloudflare Pages
+  images: {
+    unoptimized: true, // 静态导出需要
+  },
+}
 
-export default nextConfig;
+const withMDX = createMDX({
+  extension: /\.mdx?$/,
+})
+
+export default withMDX(nextConfig)

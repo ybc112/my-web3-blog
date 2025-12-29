@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title><![CDATA[Web3Dev.eth]]></title>
+        <description><![CDATA[全栈 Web3 开发者。专注底层协议研究、智能合约安全与去中心化存储方案。]]></description>
+        <link>https://yourblog.pages.dev</link>
+        <generator>Next.js + RSS</generator>
+        <lastBuildDate>Sat, 27 Dec 2025 09:26:27 GMT</lastBuildDate>
+        <atom:link href="https://yourblog.pages.dev/rss.xml" rel="self" type="application/rss+xml"/>
+        <pubDate>Sat, 27 Dec 2025 09:26:27 GMT</pubDate>
+        <copyright><![CDATA[© 2025 Web3Dev.eth]]></copyright>
+        <language><![CDATA[zh-CN]]></language>
+        <item>
+            <title><![CDATA[Hello Web3：我的第一篇区块链开发笔记]]></title>
+            <description><![CDATA[欢迎来到我的 Web3 技术博客，这里将分享智能合约开发、DeFi 协议分析和链上数据探索的实战经验。]]></description>
+            <link>https://yourblog.pages.dev/posts/hello-web3</link>
+            <guid isPermaLink="true">https://yourblog.pages.dev/posts/hello-web3</guid>
+            <category><![CDATA[web3]]></category>
+            <category><![CDATA[入门]]></category>
+            <category><![CDATA[区块链]]></category>
+            <dc:creator><![CDATA[Web3Dev.eth]]></dc:creator>
+            <pubDate>Sat, 27 Dec 2025 00:00:00 GMT</pubDate>
+            <content:encoded>&lt;p&gt;欢迎来到我的 Web3 技术博客，这里将分享智能合约开发、DeFi 协议分析和链上数据探索的实战经验。&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://yourblog.pages.dev/posts/hello-web3&quot;&gt;阅读全文 →&lt;/a&gt;&lt;/p&gt;</content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[Solidity 入门：从零开始写第一个智能合约]]></title>
+            <description><![CDATA[手把手教你用 Solidity 写一个简单的存储合约，理解状态变量、函数和 Gas 的基本概念。]]></description>
+            <link>https://yourblog.pages.dev/posts/solidity-basics</link>
+            <guid isPermaLink="true">https://yourblog.pages.dev/posts/solidity-basics</guid>
+            <category><![CDATA[solidity]]></category>
+            <category><![CDATA[智能合约]]></category>
+            <category><![CDATA[教程]]></category>
+            <dc:creator><![CDATA[Web3Dev.eth]]></dc:creator>
+            <pubDate>Fri, 26 Dec 2025 00:00:00 GMT</pubDate>
+            <content:encoded>&lt;p&gt;手把手教你用 Solidity 写一个简单的存储合约，理解状态变量、函数和 Gas 的基本概念。&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://yourblog.pages.dev/posts/solidity-basics&quot;&gt;阅读全文 →&lt;/a&gt;&lt;/p&gt;</content:encoded>
+        </item>
+    </channel>
+</rss>

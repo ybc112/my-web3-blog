@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Web3 Blog
 
-## Getting Started
+基于 Next.js + MDX 的个人技术博客，支持链上存证。
 
-First, run the development server:
+## 快速开始
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+访问 http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 写文章
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+在 `content/posts/` 目录创建 `.mdx` 文件：
 
-## Learn More
+```mdx
+---
+title: "文章标题"
+date: "2025-12-27"
+tags: ["web3", "solidity"]
+excerpt: "文章摘要"
+cover: "/images/cover.png"  # 可选
+---
 
-To learn more about Next.js, take a look at the following resources:
+正文内容...
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 部署到 Cloudflare Pages
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. 推送代码到 GitHub
+2. 登录 [Cloudflare Dashboard](https://dash.cloudflare.com)
+3. Pages → Create a project → Connect to Git
+4. 构建设置：
+   - Framework preset: Next.js
+   - Build command: `npm run build`
+   - Build output directory: `out`
 
-## Deploy on Vercel
+## 功能
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- ✅ MDX 文章支持
+- ✅ 标签分类
+- ✅ 阅读时间估算
+- ✅ RSS 订阅
+- ✅ Polygon 链上存证
+- ✅ 暗色模式
+- ✅ SEO 优化

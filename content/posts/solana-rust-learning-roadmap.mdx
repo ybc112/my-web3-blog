@@ -1,0 +1,317 @@
+---
+title: "Solana + Rust 完整学习路线：从零到独立开发 DApp"
+date: "2025-12-28"
+tags: ["solana", "rust", "教程", "学习路线"]
+excerpt: "一份完整的 Solana 开发学习指南，涵盖 Rust 基础、Anchor 框架、核心概念到实战项目，预计 4-6 个月掌握独立开发能力。"
+---
+
+## 学习路线总览
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      Solana 开发学习路线                          │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  阶段一        阶段二        阶段三        阶段四                  │
+│  ┌─────┐      ┌─────┐      ┌─────┐      ┌─────┐                │
+│  │Rust │ ──▶ │区块链│ ──▶ │环境 │ ──▶ │Anchor│               │
+│  │基础 │      │理论 │      │搭建 │      │入门  │               │
+│  └─────┘      └─────┘      └─────┘      └─────┘                │
+│  4-6周         1-2周        3-5天        2-3周                  │
+│                                                                 │
+│  阶段五        阶段六        阶段七        阶段八                  │
+│  ┌─────┐      ┌─────┐      ┌─────┐      ┌─────┐                │
+│  │核心 │ ──▶ │实战 │ ──▶ │进阶 │ ──▶ │全栈 │                │
+│  │概念 │      │项目 │      │安全 │      │开发 │                │
+│  └─────┘      └─────┘      └─────┘      └─────┘                │
+│  2-3周         4-8周        持续         2-3周                  │
+│                                                                 │
+│  总预计时间：4-6 个月（全职学习）/ 8-12 个月（业余学习）            │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 第一阶段：Rust 语言基础（4-6周）
+
+Rust 是 Solana 开发的基础，必须扎实掌握。
+
+### 学习目标
+
+- 理解 Rust 核心概念：所有权、借用、生命周期
+- 能够独立编写中等复杂度的 Rust 程序
+- 熟悉 Cargo 包管理器和项目结构
+
+### 第1-2周：基础语法
+
+| 主题 | 内容 | 重要程度 |
+|------|------|----------|
+| 环境搭建 | rustup 安装、VS Code 配置、rust-analyzer | ⭐⭐⭐⭐⭐ |
+| 变量与数据类型 | let、mut、基本类型、复合类型 | ⭐⭐⭐⭐⭐ |
+| 函数与控制流 | fn、if/else、loop、while、for、match | ⭐⭐⭐⭐⭐ |
+| 所有权系统 | ownership、move、copy、drop | ⭐⭐⭐⭐⭐ |
+| 引用与借用 | &、&mut、借用规则 | ⭐⭐⭐⭐⭐ |
+
+### 第3-4周：核心概念
+
+| 主题 | 内容 | 重要程度 |
+|------|------|----------|
+| 结构体 | struct、方法、关联函数 | ⭐⭐⭐⭐⭐ |
+| 枚举 | enum、Option、Result | ⭐⭐⭐⭐⭐ |
+| 模式匹配 | match、if let、while let | ⭐⭐⭐⭐⭐ |
+| 错误处理 | Result、?操作符、panic! | ⭐⭐⭐⭐⭐ |
+| 泛型 | 泛型函数、泛型结构体 | ⭐⭐⭐⭐ |
+| Trait | trait 定义、实现、派生 | ⭐⭐⭐⭐⭐ |
+
+### 推荐资源
+
+- [The Rust Book](https://doc.rust-lang.org/book/) - 官方权威教程
+- [Rust by Example](https://doc.rust-lang.org/rust-by-example/) - 通过示例学习
+- [Rustlings](https://github.com/rust-lang/rustlings) - 小练习巩固语法
+
+---
+
+## 第二阶段：区块链与 Solana 理论（1-2周）
+
+### Solana 账户模型
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Solana 账户结构                          │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌─────────────────┐                                        │
+│  │    Account      │                                        │
+│  ├─────────────────┤                                        │
+│  │ lamports: u64   │  ← 账户余额（SOL 最小单位）              │
+│  │ data: Vec<u8>   │  ← 存储的数据                          │
+│  │ owner: Pubkey   │  ← 拥有此账户的程序                     │
+│  │ executable: bool│  ← 是否是可执行程序                     │
+│  │ rent_epoch: u64 │  ← 租金周期                            │
+│  └─────────────────┘                                        │
+│                                                             │
+│  账户类型：                                                   │
+│  • 系统账户 - 普通钱包账户                                    │
+│  • 程序账户 - 存储可执行代码                                  │
+│  • 数据账户 - 存储程序状态                                    │
+│  • PDA 账户 - 程序派生地址账户                                │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 核心概念
+
+| 概念 | 说明 | 重要程度 |
+|------|------|----------|
+| PoH (Proof of History) | Solana 的时间证明机制 | ⭐⭐⭐⭐ |
+| 账户模型 | Solana 的一切皆账户设计 | ⭐⭐⭐⭐⭐ |
+| Program (程序) | Solana 智能合约 | ⭐⭐⭐⭐⭐ |
+| Instruction (指令) | 交易中的操作单元 | ⭐⭐⭐⭐⭐ |
+| Transaction (交易) | 指令的原子集合 | ⭐⭐⭐⭐⭐ |
+
+---
+
+## 第三阶段：开发环境搭建（3-5天）
+
+### 安装 Rust
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
+rustc --version
+```
+
+### 安装 Solana CLI
+
+```bash
+sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
+solana --version
+solana config set --url devnet
+solana-keygen new --outfile ~/.config/solana/devnet.json
+solana airdrop 2
+```
+
+### 安装 Anchor
+
+```bash
+cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+avm install latest
+avm use latest
+anchor --version
+```
+
+---
+
+## 第四阶段：Anchor 框架入门（2-3周）
+
+### 项目结构
+
+```
+my-project/
+├── Anchor.toml          # 项目配置文件
+├── Cargo.toml           # Rust 依赖
+├── programs/            # Solana 程序代码
+│   └── my-program/
+│       └── src/lib.rs   # 主程序文件
+├── tests/               # 测试文件
+└── target/              # 构建输出
+```
+
+### 第一个程序：计数器
+
+```rust
+use anchor_lang::prelude::*;
+
+declare_id!("Your_Program_ID");
+
+#[program]
+pub mod counter {
+    use super::*;
+
+    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
+        let counter = &mut ctx.accounts.counter;
+        counter.count = 0;
+        Ok(())
+    }
+
+    pub fn increment(ctx: Context<Update>) -> Result<()> {
+        let counter = &mut ctx.accounts.counter;
+        counter.count += 1;
+        Ok(())
+    }
+}
+
+#[derive(Accounts)]
+pub struct Initialize<'info> {
+    #[account(init, payer = user, space = 8 + 8)]
+    pub counter: Account<'info, Counter>,
+    #[account(mut)]
+    pub user: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct Update<'info> {
+    #[account(mut)]
+    pub counter: Account<'info, Counter>,
+}
+
+#[account]
+pub struct Counter {
+    pub count: u64,
+}
+```
+
+---
+
+## 第五阶段：核心概念深入（2-3周）
+
+### PDA（Program Derived Address）
+
+PDA 是程序派生地址，由程序"拥有"的特殊账户：
+
+- 没有私钥（不在 Ed25519 曲线上）
+- 只有程序可以为其签名
+- 可确定性地从 seeds 派生
+
+```rust
+#[derive(Accounts)]
+pub struct CreateUserStats<'info> {
+    #[account(
+        init,
+        payer = user,
+        space = 8 + 32 + 8 + 8 + 1,
+        seeds = [b"user-stats", user.key().as_ref()],
+        bump
+    )]
+    pub user_stats: Account<'info, UserStats>,
+    #[account(mut)]
+    pub user: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
+```
+
+### CPI（跨程序调用）
+
+```rust
+use anchor_spl::token::{self, Token, TokenAccount, Transfer};
+
+pub fn transfer_tokens(ctx: Context<TransferTokens>, amount: u64) -> Result<()> {
+    let cpi_accounts = Transfer {
+        from: ctx.accounts.from.to_account_info(),
+        to: ctx.accounts.to.to_account_info(),
+        authority: ctx.accounts.authority.to_account_info(),
+    };
+    let cpi_program = ctx.accounts.token_program.to_account_info();
+    let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
+
+    token::transfer(cpi_ctx, amount)?;
+    Ok(())
+}
+```
+
+---
+
+## 第六阶段：实战项目（4-8周）
+
+### 项目难度递进
+
+```
+初级项目              中级项目              高级项目
+┌─────────┐          ┌─────────┐          ┌─────────┐
+│ 计数器   │    →    │ 投票系统 │    →    │ DEX     │
+│ 留言板   │          │ NFT铸造  │          │ 借贷协议 │
+│ TODO应用 │          │ 质押挖矿 │          │ DAO     │
+└─────────┘          └─────────┘          └─────────┘
+```
+
+---
+
+## 第七阶段：安全最佳实践
+
+### 常见漏洞与防范
+
+| 漏洞类型 | 描述 | 防范措施 |
+|----------|------|----------|
+| 缺少所有权检查 | 未验证账户所有者 | 使用 owner 约束 |
+| 缺少签名者检查 | 未验证交易签名者 | 使用 Signer 类型 |
+| 整数溢出 | 数学运算溢出 | 使用 checked_math |
+| 重入攻击 | CPI 调用后状态不一致 | 先改状态再 CPI |
+
+---
+
+## 学习资源汇总
+
+| 资源 | 链接 | 说明 |
+|------|------|------|
+| Solana Docs | solana.com/docs | 官方文档 |
+| Solana Cookbook | solanacookbook.com | 实用代码示例 |
+| Anchor Book | anchor-lang.com | Anchor 框架文档 |
+| Sealevel Attacks | GitHub | 常见攻击示例 |
+
+---
+
+## 总结
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     🎓 学习路线总结                              │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  🔧 工具链: Rust + Solana CLI + Anchor                         │
+│                                                                 │
+│  📚 核心知识:                                                    │
+│     • Rust: 所有权、借用、生命周期、Trait                        │
+│     • Solana: 账户模型、PDA、CPI、SPL Token                     │
+│     • Anchor: 宏系统、账户验证、IDL                             │
+│                                                                 │
+│  ⏱️ 预计时间: 4-6 个月（全职）/ 8-12 个月（业余）                │
+│                                                                 │
+│  🚀 祝你学习顺利，早日成为 Solana 开发者！                       │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+*本文内容哈希已存证，点击下方按钮可将哈希写入 Polygon 链上。*

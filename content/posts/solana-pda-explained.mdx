@@ -1,0 +1,270 @@
+---
+title: "Solana PDA 详解：程序派生地址的原理与实践"
+date: "2025-12-26"
+tags: ["solana", "pda", "anchor", "教程"]
+excerpt: "深入理解 Solana PDA（Program Derived Address）的工作原理，以及如何在 Anchor 中使用 PDA 实现复杂的程序逻辑。"
+---
+
+## 什么是 PDA？
+
+PDA（Program Derived Address）是 Solana 中一种特殊的账户地址：
+
+- **没有私钥** - 不在 Ed25519 椭圆曲线上
+- **程序控制** - 只有程序可以为其"签名"
+- **确定性派生** - 从固定的 seeds 可以计算出唯一地址
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                         PDA 原理                            │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  Seeds + Program ID + Bump → PDA Address                    │
+│                                                             │
+│  ┌─────────┐    ┌───────────┐    ┌──────┐                  │
+│  │ "user"  │    │ Program   │    │ Bump │                  │
+│  │ pubkey  │ +  │    ID     │ +  │ 255  │ → 0xABC...123   │
+│  └─────────┘    └───────────┘    └──────┘                  │
+│                                                             │
+│  Bump 从 255 开始递减，直到找到不在曲线上的地址               │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## 为什么需要 PDA？
+
+### 1. 程序拥有的账户
+
+普通账户需要私钥签名才能操作，但程序没有私钥。PDA 让程序可以"拥有"账户：
+
+```rust
+// 用户的游戏数据，由程序控制
+#[account(
+    seeds = [b"player", user.key().as_ref()],
+    bump
+)]
+pub player_data: Account<'info, PlayerData>,
+```
+
+### 2. 确定性地址
+
+给定相同的 seeds，任何人都能计算出相同的 PDA 地址：
+
+```rust
+// 前端计算
+const [pda, bump] = PublicKey.findProgramAddressSync(
+  [Buffer.from("player"), userPubkey.toBuffer()],
+  programId
+);
+
+// 链上验证 - 使用相同的 seeds
+```
+
+### 3. 关联数据
+
+把用户和他的数据关联起来：
+
+```
+User A (Pubkey) → PDA ["user", A] → UserData for A
+User B (Pubkey) → PDA ["user", B] → UserData for B
+```
+
+## Anchor 中使用 PDA
+
+### 创建 PDA 账户
+
+```rust
+use anchor_lang::prelude::*;
+
+declare_id!("Your_Program_ID");
+
+#[program]
+pub mod pda_example {
+    use super::*;
+
+    pub fn create_profile(ctx: Context<CreateProfile>, name: String) -> Result<()> {
+        let profile = &mut ctx.accounts.profile;
+        profile.owner = ctx.accounts.owner.key();
+        profile.name = name;
+        profile.level = 1;
+        profile.xp = 0;
+        profile.bump = ctx.bumps.profile;  // 保存 bump
+        Ok(())
+    }
+}
+
+#[derive(Accounts)]
+#[instruction(name: String)]
+pub struct CreateProfile<'info> {
+    #[account(
+        init,
+        payer = owner,
+        space = 8 + 32 + 4 + 32 + 8 + 8 + 1,
+        seeds = [b"profile", owner.key().as_ref()],
+        bump
+    )]
+    pub profile: Account<'info, Profile>,
+    #[account(mut)]
+    pub owner: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
+
+#[account]
+pub struct Profile {
+    pub owner: Pubkey,
+    pub name: String,
+    pub level: u64,
+    pub xp: u64,
+    pub bump: u8,
+}
+```
+
+### 访问 PDA 账户
+
+```rust
+#[derive(Accounts)]
+pub struct UpdateProfile<'info> {
+    #[account(
+        mut,
+        seeds = [b"profile", owner.key().as_ref()],
+        bump = profile.bump,  // 使用保存的 bump
+        has_one = owner       // 验证 owner 匹配
+    )]
+    pub profile: Account<'info, Profile>,
+    pub owner: Signer<'info>,
+}
+```
+
+## PDA 签名
+
+当程序需要以 PDA 身份转移资金或调用其他程序时：
+
+```rust
+pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {
+    let vault = &ctx.accounts.vault;
+
+    // 构造 PDA 签名的 seeds
+    let seeds = &[
+        b"vault",
+        ctx.accounts.owner.key.as_ref(),
+        &[vault.bump],
+    ];
+    let signer_seeds = &[&seeds[..]];
+
+    // 使用 PDA 签名进行转账
+    let cpi_accounts = Transfer {
+        from: ctx.accounts.vault_token.to_account_info(),
+        to: ctx.accounts.user_token.to_account_info(),
+        authority: vault.to_account_info(),  // PDA 作为 authority
+    };
+    let cpi_program = ctx.accounts.token_program.to_account_info();
+    let cpi_ctx = CpiContext::new_with_signer(
+        cpi_program,
+        cpi_accounts,
+        signer_seeds  // 传入签名 seeds
+    );
+
+    token::transfer(cpi_ctx, amount)?;
+    Ok(())
+}
+```
+
+## 常见 PDA 模式
+
+### 1. 用户数据存储
+
+```rust
+// 每个用户一个数据账户
+seeds = [b"user-data", user.key().as_ref()]
+```
+
+### 2. 全局配置
+
+```rust
+// 程序的全局配置，只有一个
+seeds = [b"config"]
+```
+
+### 3. 关联账户
+
+```rust
+// 某个 NFT 的元数据
+seeds = [b"metadata", mint.key().as_ref()]
+```
+
+### 4. 计数器模式
+
+```rust
+// 第 N 个订单
+seeds = [b"order", user.key().as_ref(), &order_id.to_le_bytes()]
+```
+
+### 5. 多层嵌套
+
+```rust
+// 用户在某个游戏中的角色
+seeds = [b"character", game.key().as_ref(), user.key().as_ref()]
+```
+
+## 前端查找 PDA
+
+```typescript
+import { PublicKey } from "@solana/web3.js";
+
+// 查找 PDA
+const [profilePda, bump] = PublicKey.findProgramAddressSync(
+  [Buffer.from("profile"), userPubkey.toBuffer()],
+  programId
+);
+
+// 使用 PDA 读取数据
+const profileAccount = await program.account.profile.fetch(profilePda);
+```
+
+## 注意事项
+
+### 1. Bump 的重要性
+
+始终保存并使用保存的 bump，避免重复计算：
+
+```rust
+#[account]
+pub struct MyPda {
+    pub data: u64,
+    pub bump: u8,  // 保存 bump
+}
+```
+
+### 2. Seeds 唯一性
+
+确保 seeds 组合能产生唯一的 PDA：
+
+```rust
+// ❌ 不好 - 可能冲突
+seeds = [b"data"]
+
+// ✅ 好 - 包含用户信息
+seeds = [b"data", user.key().as_ref()]
+```
+
+### 3. 空间计算
+
+别忘了 bump 占用 1 byte：
+
+```rust
+space = 8 + ... + 1  // 最后的 1 是 bump
+```
+
+## 总结
+
+| 概念 | 说明 |
+|------|------|
+| PDA | 程序派生地址，由 seeds 确定性生成 |
+| Bump | 用于确保地址不在曲线上的随机数 |
+| Seeds | 用于派生 PDA 的字节数组 |
+| 签名 | 程序可以用 PDA 的 seeds 进行 CPI 签名 |
+
+PDA 是 Solana 开发的核心概念，掌握它才能开发复杂的链上应用。
+
+---
+
+*本文内容哈希已存证，点击下方按钮可将哈希写入 Polygon 链上。*
