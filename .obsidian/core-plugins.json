@@ -1,0 +1,10 @@
+{
+  "file-explorer": true,
+  "global-search": true,
+  "switcher": true,
+  "markdown-importer": true,
+  "word-count": true,
+  "editor-status": true,
+  "outline": true,
+  "templates": true
+}

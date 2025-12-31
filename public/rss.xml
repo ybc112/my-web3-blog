@@ -1,37 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title><![CDATA[Web3Dev.eth]]></title>
+        <title><![CDATA[YBC Web3]]></title>
         <description><![CDATA[全栈 Web3 开发者。专注底层协议研究、智能合约安全与去中心化存储方案。]]></description>
-        <link>https://yourblog.pages.dev</link>
+        <link>https://ybc-web3-blog.pages.dev</link>
         <generator>Next.js + RSS</generator>
-        <lastBuildDate>Sat, 27 Dec 2025 09:26:27 GMT</lastBuildDate>
-        <atom:link href="https://yourblog.pages.dev/rss.xml" rel="self" type="application/rss+xml"/>
-        <pubDate>Sat, 27 Dec 2025 09:26:27 GMT</pubDate>
-        <copyright><![CDATA[© 2025 Web3Dev.eth]]></copyright>
+        <lastBuildDate>Wed, 31 Dec 2025 05:00:54 GMT</lastBuildDate>
+        <atom:link href="https://ybc-web3-blog.pages.dev/rss.xml" rel="self" type="application/rss+xml"/>
+        <pubDate>Wed, 31 Dec 2025 05:00:54 GMT</pubDate>
+        <copyright><![CDATA[© 2025 YBC Web3]]></copyright>
         <language><![CDATA[zh-CN]]></language>
+        <item>
+            <title><![CDATA[Solana + Rust 完整学习路线：从零到独立开发 DApp]]></title>
+            <description><![CDATA[一份完整的 Solana 开发学习指南，涵盖 Rust 基础、Anchor 框架、核心概念到实战项目，预计 4-6 个月掌握独立开发能力。]]></description>
+            <link>https://ybc-web3-blog.pages.dev/posts/solana-rust-learning-roadmap</link>
+            <guid isPermaLink="true">https://ybc-web3-blog.pages.dev/posts/solana-rust-learning-roadmap</guid>
+            <category><![CDATA[solana]]></category>
+            <category><![CDATA[rust]]></category>
+            <category><![CDATA[教程]]></category>
+            <category><![CDATA[学习路线]]></category>
+            <dc:creator><![CDATA[YBC Web3]]></dc:creator>
+            <pubDate>Sun, 28 Dec 2025 00:00:00 GMT</pubDate>
+            <content:encoded>&lt;p&gt;一份完整的 Solana 开发学习指南，涵盖 Rust 基础、Anchor 框架、核心概念到实战项目，预计 4-6 个月掌握独立开发能力。&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://ybc-web3-blog.pages.dev/posts/solana-rust-learning-roadmap&quot;&gt;阅读全文 →&lt;/a&gt;&lt;/p&gt;</content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[Anchor 框架入门：写你的第一个 Solana 程序]]></title>
+            <description><![CDATA[手把手教你使用 Anchor 框架开发 Solana 程序，从环境搭建到部署第一个计数器合约。]]></description>
+            <link>https://ybc-web3-blog.pages.dev/posts/anchor-tutorial</link>
+            <guid isPermaLink="true">https://ybc-web3-blog.pages.dev/posts/anchor-tutorial</guid>
+            <category><![CDATA[solana]]></category>
+            <category><![CDATA[anchor]]></category>
+            <category><![CDATA[rust]]></category>
+            <category><![CDATA[智能合约]]></category>
+            <dc:creator><![CDATA[YBC Web3]]></dc:creator>
+            <pubDate>Sat, 27 Dec 2025 00:00:00 GMT</pubDate>
+            <content:encoded>&lt;p&gt;手把手教你使用 Anchor 框架开发 Solana 程序，从环境搭建到部署第一个计数器合约。&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://ybc-web3-blog.pages.dev/posts/anchor-tutorial&quot;&gt;阅读全文 →&lt;/a&gt;&lt;/p&gt;</content:encoded>
+        </item>
         <item>
             <title><![CDATA[Hello Web3：我的第一篇区块链开发笔记]]></title>
             <description><![CDATA[欢迎来到我的 Web3 技术博客，这里将分享智能合约开发、DeFi 协议分析和链上数据探索的实战经验。]]></description>
-            <link>https://yourblog.pages.dev/posts/hello-web3</link>
-            <guid isPermaLink="true">https://yourblog.pages.dev/posts/hello-web3</guid>
+            <link>https://ybc-web3-blog.pages.dev/posts/hello-web3</link>
+            <guid isPermaLink="true">https://ybc-web3-blog.pages.dev/posts/hello-web3</guid>
             <category><![CDATA[web3]]></category>
             <category><![CDATA[入门]]></category>
             <category><![CDATA[区块链]]></category>
-            <dc:creator><![CDATA[Web3Dev.eth]]></dc:creator>
+            <dc:creator><![CDATA[YBC Web3]]></dc:creator>
             <pubDate>Sat, 27 Dec 2025 00:00:00 GMT</pubDate>
-            <content:encoded>&lt;p&gt;欢迎来到我的 Web3 技术博客，这里将分享智能合约开发、DeFi 协议分析和链上数据探索的实战经验。&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://yourblog.pages.dev/posts/hello-web3&quot;&gt;阅读全文 →&lt;/a&gt;&lt;/p&gt;</content:encoded>
+            <content:encoded>&lt;p&gt;欢迎来到我的 Web3 技术博客，这里将分享智能合约开发、DeFi 协议分析和链上数据探索的实战经验。&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://ybc-web3-blog.pages.dev/posts/hello-web3&quot;&gt;阅读全文 →&lt;/a&gt;&lt;/p&gt;</content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[Solana PDA 详解：程序派生地址的原理与实践]]></title>
+            <description><![CDATA[深入理解 Solana PDA（Program Derived Address）的工作原理，以及如何在 Anchor 中使用 PDA 实现复杂的程序逻辑。]]></description>
+            <link>https://ybc-web3-blog.pages.dev/posts/solana-pda-explained</link>
+            <guid isPermaLink="true">https://ybc-web3-blog.pages.dev/posts/solana-pda-explained</guid>
+            <category><![CDATA[solana]]></category>
+            <category><![CDATA[pda]]></category>
+            <category><![CDATA[anchor]]></category>
+            <category><![CDATA[教程]]></category>
+            <dc:creator><![CDATA[YBC Web3]]></dc:creator>
+            <pubDate>Fri, 26 Dec 2025 00:00:00 GMT</pubDate>
+            <content:encoded>&lt;p&gt;深入理解 Solana PDA（Program Derived Address）的工作原理，以及如何在 Anchor 中使用 PDA 实现复杂的程序逻辑。&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://ybc-web3-blog.pages.dev/posts/solana-pda-explained&quot;&gt;阅读全文 →&lt;/a&gt;&lt;/p&gt;</content:encoded>
         </item>
         <item>
             <title><![CDATA[Solidity 入门：从零开始写第一个智能合约]]></title>
             <description><![CDATA[手把手教你用 Solidity 写一个简单的存储合约，理解状态变量、函数和 Gas 的基本概念。]]></description>
-            <link>https://yourblog.pages.dev/posts/solidity-basics</link>
-            <guid isPermaLink="true">https://yourblog.pages.dev/posts/solidity-basics</guid>
+            <link>https://ybc-web3-blog.pages.dev/posts/solidity-basics</link>
+            <guid isPermaLink="true">https://ybc-web3-blog.pages.dev/posts/solidity-basics</guid>
             <category><![CDATA[solidity]]></category>
             <category><![CDATA[智能合约]]></category>
             <category><![CDATA[教程]]></category>
-            <dc:creator><![CDATA[Web3Dev.eth]]></dc:creator>
+            <dc:creator><![CDATA[YBC Web3]]></dc:creator>
             <pubDate>Fri, 26 Dec 2025 00:00:00 GMT</pubDate>
-            <content:encoded>&lt;p&gt;手把手教你用 Solidity 写一个简单的存储合约，理解状态变量、函数和 Gas 的基本概念。&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://yourblog.pages.dev/posts/solidity-basics&quot;&gt;阅读全文 →&lt;/a&gt;&lt;/p&gt;</content:encoded>
+            <content:encoded>&lt;p&gt;手把手教你用 Solidity 写一个简单的存储合约，理解状态变量、函数和 Gas 的基本概念。&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://ybc-web3-blog.pages.dev/posts/solidity-basics&quot;&gt;阅读全文 →&lt;/a&gt;&lt;/p&gt;</content:encoded>
         </item>
     </channel>
 </rss>

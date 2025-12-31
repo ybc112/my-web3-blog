@@ -25,7 +25,12 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "reading-time": "^1.5.0",
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-pretty-code": "^0.14.1",
+    "rehype-slug": "^6.0.0",
+    "remark-gfm": "^4.0.1",
     "rss": "^1.2.2",
+    "shiki": "^3.20.0",
     "viem": "^2.43.3",
     "wagmi": "^2.19.5"
   },

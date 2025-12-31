@@ -86,3 +86,18 @@ export function getAllTags(): string[] {
   posts.forEach((post) => post.tags.forEach((tag) => tags.add(tag)))
   return Array.from(tags)
 }
+
+// 获取相邻文章（上一篇、下一篇）
+export function getAdjacentPosts(slug: string): { prev: PostMeta | null; next: PostMeta | null } {
+  const posts = getAllPosts()
+  const currentIndex = posts.findIndex((post) => post.slug === slug)
+
+  if (currentIndex === -1) {
+    return { prev: null, next: null }
+  }
+
+  return {
+    prev: currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null,
+    next: currentIndex > 0 ? posts[currentIndex - 1] : null,
+  }
+}
