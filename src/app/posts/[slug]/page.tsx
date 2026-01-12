@@ -5,10 +5,9 @@ import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import Link from 'next/link'
-import { ArrowLeft, Calendar, Clock, Tag, BookOpen } from 'lucide-react'
+import { ArrowLeft, Calendar, Clock, Tag } from 'lucide-react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import HashProof from '@/components/HashProof'
 import Comments from '@/components/Comments'
 import TableOfContents from '@/components/TableOfContents'
 import ReadingProgress from '@/components/ReadingProgress'
@@ -118,11 +117,6 @@ export default async function PostPage({ params }: Props) {
                 <Clock size={14} />
                 {post.readingTime}
               </span>
-              <span className="text-zinc-300">|</span>
-              <span className="flex items-center gap-1.5 text-green-600 font-medium">
-                <BookOpen size={14} />
-                链上存证
-              </span>
             </div>
           </div>
         </header>
@@ -155,11 +149,6 @@ export default async function PostPage({ params }: Props) {
                 <div className="flex-1 h-px bg-gradient-to-r from-transparent via-zinc-200 to-transparent"></div>
                 <span className="text-zinc-400 text-sm font-medium">END</span>
                 <div className="flex-1 h-px bg-gradient-to-r from-transparent via-zinc-200 to-transparent"></div>
-              </div>
-
-              {/* 链上存证 */}
-              <div className="mb-12">
-                <HashProof content={post.content} />
               </div>
 
               {/* 标签云 */}
